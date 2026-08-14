@@ -12,8 +12,8 @@ const server = async () => {
 
   app.use(express.json());
 
-  const customerRoutes = require("./src/routes/customerRoutes");
-  app.use("/api/auth/customer", customerRoutes);
+  const userRoutes = require("./src/routes/userRoutes");
+  app.use("/api/auth/user", userRoutes);
 
   const authRoutes = require("./src/routes/authRoutes");
   app.use("/api/auth", authRoutes);
