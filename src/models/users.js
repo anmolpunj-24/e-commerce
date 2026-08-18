@@ -1,8 +1,16 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const nanoid = require("nanoid");
 
 const userSchema = new mongoose.Schema(
   {
+    uuid: {
+      type: String,
+      default: () => nanoid(7),
+      unique: true,
+      required: true,
+    },
+
     name: {
       type: String,
       required: [true, "Name is required!"],
@@ -19,6 +27,11 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required!"],
+    },
+
+    profile: {
+      type: String,
+      default: "/assets/dummy-profile.jpg",
     },
 
     isActive: { type: Boolean, default: true },

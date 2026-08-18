@@ -18,9 +18,12 @@ const server = async () => {
   const authRoutes = require("./src/routes/authRoutes");
   app.use("/api/auth", authRoutes);
 
+  const customerRoutes = require("./src/routes/customerRoutes")
+  app.use("/api/auth/customer", customerRoutes)
+
   app.use(errorHandlingMiddleware);
 
-  PORT = process.env.PORT || 5000;
+  PORT = process.env.PORT || 5000; 
 
   app.listen(PORT, function () {
     console.log(`Backend is running on port ${PORT}`);

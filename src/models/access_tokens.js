@@ -7,6 +7,7 @@ const accessTokenSchema = new mongoose.Schema(
       ref: "users",
       required: true,
     },
+    
     token: {
       type: String,
       required: true,

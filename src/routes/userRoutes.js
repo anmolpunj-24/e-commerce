@@ -1,7 +1,7 @@
 const express = require("express");
 const routes = express.Router();
 
-const userController = require("../controllers/users/usersController");
+const userController = require("../controllers/customers/usersController");
 
 const addUserRules = require("../validations/addUserValidations");
 

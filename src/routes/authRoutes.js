@@ -8,7 +8,7 @@ const passwordValidationRules = require("../validations/passwordValidations");
 const validationMiddleware = require("../middlewares/globalValidationMiddleware");
 const authenticateUserMiddleware = require("../middlewares/authMiddleware");
 
-const authController = require("../controllers/users/authController");
+const authController = require("../controllers/customers/authController");
 
 routes.post(
   "/login",

@@ -1,7 +1,8 @@
 const userModel = require("../models/users");
+const customerModel = require("../models/customers");
 
 const addUserService = async (userData) => {
-  const { name, email, password } = userData;
+  const { name, email, password, gender, dob, phone } = userData;
 
   const newUser = new userModel({
     name,
@@ -10,6 +11,15 @@ const addUserService = async (userData) => {
   });
 
   const savedUser = await newUser.save();
+
+  const newCustomer = new customerModel({
+    userId: savedUser?._id,
+    gender,
+    dob,
+    phone,
+  });
+
+  const savedCustomer = await newCustomer.save();
 
   return savedUser;
 };
@@ -27,11 +37,10 @@ const getOneUserService = async (id) => {
 };
 
 const updateUserService = async (id, userData) => {
-  const updatedUser = await userModel.findByIdAndUpdate(
-    id,
-    userData,
-    { returnDocument: "after", runValidators: true },
-  );
+  const updatedUser = await userModel.findByIdAndUpdate(id, userData, {
+    returnDocument: "after",
+    runValidators: true,
+  });
 
   return updatedUser;
 };
