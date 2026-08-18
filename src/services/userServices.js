@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require("path");
+
 const userModel = require("../models/users");
 const customerModel = require("../models/customers");
 
@@ -50,10 +53,39 @@ const deleteUserService = async (id) => {
   return deletedUser;
 };
 
+const uploadProfileService = async (user, file) => {
+  if (!user._id) {
+    return res.status(404).json({ message: "User not found!" });
+  }
+
+  if (!file) {
+    return res.status(400).json({ message: "No file provided!" });
+  }
+
+  if (user.profile) {
+    const oldImagePath = path.join(
+      process.cwd(),
+      "uploads",
+      user._id,
+      user.profile,
+    );
+    if (fs.existsSync(oldImagePath)) {
+      fs.unlinkSync(oldImagePath);
+    }
+  }
+
+  user.profile = file.filename;
+
+  const updatedUserProfile = await user.save();
+
+  return updatedUserProfile;
+};
+
 module.exports = {
   addUserService,
   getAllUsersService,
   getOneUserService,
   updateUserService,
   deleteUserService,
+  uploadProfileService,
 };

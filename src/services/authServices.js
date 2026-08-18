@@ -42,13 +42,10 @@ const registerUserService = async (body) => {
     },
   );
 
-  const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
-
   const newUser = new user({
     name,
     email,
-    password: hashedPassword,
+    password,
   });
 
   const registeredUser = await newUser.save();
