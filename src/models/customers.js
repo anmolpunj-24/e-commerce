@@ -1,7 +1,15 @@
 const mongoose = require("mongoose");
+const nanoid = require("nanoid");
 
 const customerSchema = new mongoose.Schema(
   {
+    uuid: {
+      type: String,
+      default: () => nanoid(7),
+      unique: true,
+      required: true,
+    },
+
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",

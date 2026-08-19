@@ -15,7 +15,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const getOneUser = async (req, res) => {
-  const userId = req.params.id;
+  const userId = req.params.uuid;
 
   const userData = await userService.getOneUserService(userId);
 
@@ -23,7 +23,7 @@ const getOneUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const userId = req.params.id;
+  const userId = req.params.uuid;
 
   if (!userId) {
     return res.status(401).json({ message: "User id not found!" });
@@ -35,7 +35,7 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const userId = req.params.id;
+  const userId = req.params.uuid;
 
   if (!userId) {
     return res.status(401).json({ message: "User id not found!" });

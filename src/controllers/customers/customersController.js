@@ -9,7 +9,7 @@ const getAllCustomers = async (req, res) => {
 };
 
 const getOneCustomer = async (req, res) => {
-  const customerId = req.params.id;
+  const customerId = req.params.uuid;
 
   const customerData = await customerService.getOneCustomerService(customerId);
 
@@ -19,7 +19,7 @@ const getOneCustomer = async (req, res) => {
 };
 
 const updateCustomer = async (req, res) => {
-  const customerId = req.params.id;
+  const customerId = req.params.uuid;
 
   if (!customerId) {
     return res.status(401).json({ message: "Customer id not found!" });
@@ -36,7 +36,7 @@ const updateCustomer = async (req, res) => {
 };
 
 const deleteCustomer = async (req, res) => {
-  const customerId = req.params.id;
+  const customerId = req.params.uuid;
 
   if (!customerId) {
     return res.status(401).json({ message: "Customer id not found!" });
