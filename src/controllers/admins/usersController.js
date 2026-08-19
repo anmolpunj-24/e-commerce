@@ -3,7 +3,7 @@ const userService = require("../../services/userServices");
 const addUser = async (req, res) => {
   const newUser = await userService.addUserService(req.body);
 
-  return res.status(201).json({ message: "User Created!", user: newUser });
+  return res.status(201).json({ message: "User created!", user: newUser });
 };
 
 const getAllUsers = async (req, res) => {
@@ -11,7 +11,7 @@ const getAllUsers = async (req, res) => {
 
   return res
     .status(200)
-    .json({ message: "All users Fetched!", users: allUsers });
+    .json({ message: "All users fetched!", users: allUsers });
 };
 
 const getOneUser = async (req, res) => {
@@ -19,7 +19,7 @@ const getOneUser = async (req, res) => {
 
   const userData = await userService.getOneUserService(userId);
 
-  return res.status(200).json({ message: "User Fetched!", user: userData });
+  return res.status(200).json({ message: "User fetched!", user: userData });
 };
 
 const updateUser = async (req, res) => {
@@ -31,7 +31,7 @@ const updateUser = async (req, res) => {
 
   const updatedUser = await userService.updateUserService(userId, req.body);
 
-  return res.status(200).json({ message: "User Updated!", user: updatedUser });
+  return res.status(200).json({ message: "User updated!", user: updatedUser });
 };
 
 const deleteUser = async (req, res) => {
@@ -43,12 +43,20 @@ const deleteUser = async (req, res) => {
 
   const deletedUser = await userService.deleteUserService(userId);
 
-  return res.status(200).json({ message: "User Deleted!", user: deletedUser });
+  return res.status(200).json({ message: "User deleted!", user: deletedUser });
 };
 
 const uploadProfile = async (req, res) => {
   const user = req.user;
   const file = req.file;
+
+  if (!user._id) {
+    return res.status(404).json({ message: "User not found!" });
+  }
+
+  if (!file) {
+    return res.status(400).json({ message: "No file provided!" });
+  }
 
   const updatedUserProfile = await userService.uploadProfileService(user, file);
 

@@ -17,6 +17,13 @@ const customerSchema = new mongoose.Schema(
       required: [true, "Phone is required!"],
       unique: true,
     },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
+    deletedAt: { type: Date, default: null },
   },
   { timestamps: true },
 );

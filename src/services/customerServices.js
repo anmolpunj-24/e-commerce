@@ -23,7 +23,12 @@ const updateCustomerService = async (id, customerData) => {
 };
 
 const deleteCustomerService = async (id) => {
-  const deletedUser = await customerModel.findByIdAndDelete(id);
+  const deletedUser = await customerModel.findByIdAndUpdate(
+    id,
+    { deletedAt: new Date() },
+    { new: true },
+  );
+  
   return deletedUser;
 };
 

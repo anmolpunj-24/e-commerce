@@ -3,8 +3,6 @@ const routes = express.Router();
 
 const customerController = require("../controllers/customers/customersController");
 
-const validationMiddleware = require("../middlewares/globalValidationMiddleware");
-
 routes.get("/getAll", customerController.getAllCustomers);
 
 routes.get("/get/:id", customerController.getOneCustomer);

@@ -5,7 +5,7 @@ const getAllCustomers = async (req, res) => {
 
   return res
     .status(200)
-    .json({ message: "All customers Fetched!", customers: allCustomers });
+    .json({ message: "All customers fetched!", customers: allCustomers });
 };
 
 const getOneCustomer = async (req, res) => {
@@ -15,7 +15,7 @@ const getOneCustomer = async (req, res) => {
 
   return res
     .status(200)
-    .json({ message: "Customer Fetched!", customer: customerData });
+    .json({ message: "Customer fetched!", customer: customerData });
 };
 
 const updateCustomer = async (req, res) => {
@@ -32,7 +32,7 @@ const updateCustomer = async (req, res) => {
 
   return res
     .status(200)
-    .json({ message: "Customer Updated!", customer: updatedCustomer });
+    .json({ message: "Customer updated!", customer: updatedCustomer });
 };
 
 const deleteCustomer = async (req, res) => {
@@ -47,7 +47,7 @@ const deleteCustomer = async (req, res) => {
 
   return res
     .status(200)
-    .json({ message: "Customer Deleted!", customer: deletedCustomer });
+    .json({ message: "Customer deleted!", customer: deletedCustomer });
 };
 
 module.exports = {

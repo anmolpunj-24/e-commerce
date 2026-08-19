@@ -49,19 +49,15 @@ const updateUserService = async (id, userData) => {
 };
 
 const deleteUserService = async (id) => {
-  const deletedUser = await userModel.findByIdAndDelete(id);
+  const deletedUser = await userModel.findByIdAndUpdate(
+    id,
+    { deletedAt: new Date() },
+    { new: true },
+  );
   return deletedUser;
 };
 
 const uploadProfileService = async (user, file) => {
-  if (!user._id) {
-    return res.status(404).json({ message: "User not found!" });
-  }
-
-  if (!file) {
-    return res.status(400).json({ message: "No file provided!" });
-  }
-
   if (user.profile) {
     const oldImagePath = path.join(
       process.cwd(),

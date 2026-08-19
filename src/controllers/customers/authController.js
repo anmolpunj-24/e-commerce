@@ -1,8 +1,28 @@
-const authService = require("../../services/authServices");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
+const user = require("../../models/users");
+const accessTokensModel = require("../../models/access_tokens");
 
 const userLogin = async (req, res) => {
-  console.log(req.user);
-  const token = await authService.userLoginService(req.body);
+  const { email, password } = req.body;
+  const existingUser = await user.findOne({
+    email: email.toLowerCase(),
+  });
+
+  if (!existingUser) {
+    return res.status(401).json({ message: "Invalid email or password!" });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+
+  if (!isPasswordValid) {
+    return res.status(401).json({ message: "Invalid email or password!" });
+  }
+
+  const token = jwt.sign({ email: existingUser.email }, "", {
+    algorithm: "none",
+  });
 
   return res.status(200).json({
     message: "Login succesfull!",
@@ -11,12 +31,38 @@ const userLogin = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { user, token } = await authService.registerUserService(req.body);
+  const { name, email, password } = req.body;
+
+  const token = jwt.sign(
+    {
+      name: name,
+      email: email,
+    },
+    "",
+    {
+      algorithm: "none",
+    },
+  );
+
+  const newUser = new user({
+    name,
+    email,
+    password,
+  });
+
+  const registeredUser = await newUser.save();
+
+  const newSessionToken = new accessTokensModel({
+    userId: registeredUser?._id,
+    token: token,
+  });
+
+  const savedSessionToken = await newSessionToken.save();
 
   return res.status(201).json({
     message: "Registration succesfull!",
-    user,
-    token,
+    user: registeredUser,
+    token: savedSessionToken,
   });
 };
 
@@ -31,19 +77,52 @@ const forgetPassword = async (req, res) => {
 };
 
 const resetPassword = async (req, res) => {
-  const updatedPassword = await authService.resetPasswordService(
-    req.body,
-    req.user,
-  );
+  const { newPassword, confirmNewPassword } = req.body;
+  const user = req.user;
+
+  if (!newPassword || !confirmNewPassword) {
+    return res.status(400).json({ message: "All fields are required!" });
+  }
+
+  if (newPassword != confirmNewPassword) {
+    return res
+      .status(422)
+      .json({ message: "New password and confirm password does not match!" });
+  }
+
+  user.password = newPassword;
+
+  const updatedPassword = await user.save();
 
   return res.status(200).json({ message: "Password reset successfully!" });
 };
 
 const updatePassword = async (req, res) => {
-  const updatedPassword = await authService.updatePasswordService(
-    req.body,
-    req.user,
+  const { currentPassword, newPassword, confirmNewPassword } = req.body;
+  const user = req.user;
+
+  if (!currentPassword || !newPassword || !confirmNewPassword) {
+    return res.status(400).json({ message: "All fields are required!" });
+  }
+
+  if (newPassword != confirmNewPassword) {
+    return res
+      .status(422)
+      .json({ message: "New password and confirm password does not match!" });
+  }
+
+  const validCurrentPassword = await bcrypt.compare(
+    currentPassword,
+    user.password,
   );
+
+  if (!validCurrentPassword) {
+    return res.status(401).json({ message: "Invalid password!" });
+  }
+
+  user.password = newPassword;
+
+  const updatedPassword = await user.save();
 
   return res.status(200).json({ message: "Password updated successfully!" });
 };
@@ -55,7 +134,8 @@ const logout = async (req, res) => {
     return res.status(401).json({ message: "User not found!" });
   }
 
-  const deletedSessionToken = await authService.logoutService(userId);
+  const deletedSessionToken = await accessTokensModel.deleteOne({ _id: id });
+
   return res.status(200).json({ message: "Logout successfull!" });
 };
 

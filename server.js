@@ -21,6 +21,9 @@ const server = async () => {
   const customerRoutes = require("./src/routes/customerRoutes")
   app.use("/api/auth/customer", customerRoutes)
 
+  const customerAddressRoutes = require("./src/routes/customerAddressRoutes")
+  app.use("/api/auth/customer-address", customerAddressRoutes)
+
   app.use(errorHandlingMiddleware);
 
   PORT = process.env.PORT || 5000; 
